@@ -1,0 +1,7 @@
+name = "BoolExprs"
+uuid = "34ac34c8-35ed-11e9-3243-41a32986215f"
+authors = ["Brian Rogoff <brogoff@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
