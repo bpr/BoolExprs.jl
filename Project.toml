@@ -1,5 +1,5 @@
 name = "BoolExprs"
-uuid = "34ac34c8-35ed-11e9-3243-41a32986215f"
+uuid = "00a27e70-1d62-540f-bcdc-a22b13a847b1"
 authors = ["Brian Rogoff <brogoff@gmail.com>"]
 version = "0.1.0"
 
