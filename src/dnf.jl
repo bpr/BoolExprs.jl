@@ -1,30 +1,26 @@
-function makeConjunction(a::BoolExprVec)::And
-    And(children(a))
-end
-
-function dnfCaseAnd(exprs::BoolExprVec)::Or
-    newChildren = map(dnf, exprs)
-    # Each item in newChildren is in DNF form, that is
+function dnf_and(exprs::BoolExprVec)::Or
+    dnf_exprs = map(dnf, exprs)
+    # Each item in dnf_exprs is in DNF form, that is
     # * A variable
     # * A disjunction (Or) of conjunctions (And) of variables
-    childDNFs = map(children, newChildren)
-    prod = cartesianProduct(childDNFs)
-    Or(map(makeConjunction, prod))
+    childDNFs = map(children, dnf_exprs)
+    prod = cartprod(childDNFs)
+    Or(map(a -> And(children(a)), prod))
 end
 
-function dnfCaseOr(exprs::BoolExprVec)::Or
-    newChildren = map(dnf, exprs)
-    Or(flatMap(children, newChildren))
+function dnf_or(exprs::BoolExprVec)::Or
+    dnf_exprs = map(dnf, exprs)
+    Or(flatmap(children, dnf_exprs))
 end
 
-dnfCaseNot(parent::Not, expr::BoolExpr) = parent
-dnfCaseNot(parent::Not, expr::And) = dnf(Or(negate(expr.exprs))) # DeMorgan
-dnfCaseNot(parent::Not, expr::Or)  = dnf(And(negate(expr.exprs))) # DeMorgan
-dnfCaseNot(parent::Not, expr::Not) = dnf(expr.expr) # Double negation
-dnfCaseNot(parent::Not, expr::True) = f
-dnfCaseNot(parent::Not, expr::False) = t
+dnf_not(parent::Not, expr::BoolExpr) = parent
+dnf_not(parent::Not, expr::And) = dnf(Or(negate(expr.exprs))) # DeMorgan
+dnf_not(parent::Not, expr::Or)  = dnf(And(negate(expr.exprs))) # DeMorgan
+dnf_not(parent::Not, expr::Not) = dnf(expr.expr) # Double negation
+dnf_not(parent::Not, expr::True) = f
+dnf_not(parent::Not, expr::False) = t
 
-dnf(expr::Not) = dnfCaseNot(expr, expr.expr)
-dnf(expr::And) = dnfCaseAnd(expr.exprs)
-dnf(expr::Or) = dnfCaseOr(expr.exprs)
+dnf(expr::Not) = dnf_not(expr, expr.expr)
+dnf(expr::And) = dnf_and(expr.exprs)
+dnf(expr::Or) = dnf_or(expr.exprs)
 dnf(expr::BoolExpr) = expr

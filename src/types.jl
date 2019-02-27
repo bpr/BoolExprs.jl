@@ -31,7 +31,7 @@ struct Or <: BoolExpr
     end
 end
 
-BoolExprVec = Array{BoolExpr, 1}
+const BoolExprVec = Array{BoolExpr, 1}
 
 const t = True()
 const f = False()
